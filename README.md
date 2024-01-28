@@ -4,6 +4,8 @@ A Github action to run .net package dependency checks, and display results in a 
 
 This action uses a Docker image from [pkgchk-cli](https://github.com/tonycknight/pkgchk-cli) to run scans and build Github reports.
 
+:warning: This action only works with .Net SDK 7.0.200 or higher. Check your `global.json` and other settings!
+
 ## How to use
 
 Your repository `Workflow permissions` settings should give `Read and write permissions` to the `GITHUB_TOKEN`.
