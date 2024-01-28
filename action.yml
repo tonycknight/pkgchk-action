@@ -53,9 +53,9 @@ inputs:
     required: true
     default: false
   fail-on-legacy: # id of input
-    description: 'fail on deprecated packages for Legacy reasons'
+    description: 'fail on packages deprecated for Legacy reasons'
     required: true
-    default: true
+    default: false
 runs:  
       using: 'docker'
       image: 'docker://ghcr.io/tonycknight/pkgchk-cli:v0.2.323-preview'
