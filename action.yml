@@ -1,0 +1,95 @@
+name: 'pkgchk'
+description: 'Run .net package checks'
+inputs:
+  project-path:  # id of input
+    description: 'The relative path to the solution or project'
+    required: true
+  dependencies:  # id of input
+    description: 'Include dependencies in scans'
+    required: false
+    default: false
+  deprecated:  # id of input
+    description: 'Include deprecated packages in scans'
+    required: false
+    default: false    
+  vulnerable: # id of input
+    description: 'Include vulneraeble packages in scans'
+    required: false
+    default: true
+  transitives: # id of input
+    description: 'Include transitive packages in scans'
+    required: false
+    default: true
+  trace: # id of input
+    description: 'Output trace'
+    required: false
+    default: false
+  githubtoken: # id of input
+    description: 'Github token'
+    required: true
+    default: ${{ github.token }}
+  repo: # id of input
+    description: 'The repo'
+    required: false
+    default: ${{ github.repository }}
+  github-title: # id of input
+    description: 'The report title'
+    required: false
+    default: 'Package vulnerabilities'
+  prid: # id of input
+    description: 'The pull request ID'
+    required: false
+    default: ${{ github.event.number }}
+  fail-on-critical: # id of input
+    description: 'Faiil on Critical severity vulnerabilities and packages deprecated for Critical Bugs reasons'
+    required: true
+    default: true
+  fail-on-high: # id of input
+    description: 'Faiil on High severity vulnerabilities'
+    required: true
+    default: true
+  fail-on-moderate: # id of input
+    description: 'Faiil on Moderate severity vulnerabilities'
+    required: true
+    default: false
+  fail-on-legacy: # id of input
+    description: 'Faiil on deprecated packages for Legacy reasons'
+    required: true
+    default: false
+runs:  
+      using: 'docker'
+      image: 'docker://ghcr.io/tonycknight/pkgchk-cli:v0.2.323-preview'
+      args: 
+      - /github/workspace/${{ inputs.project-path }}
+      - '--dependencies'
+      - ${{ inputs.dependencies }}
+      - '--deprecated'
+      - ${{ inputs.deprecated }}
+      - '--vulnerable'
+      - ${{ inputs.vulnerable }}
+      - '--transitive'
+      - ${{ inputs.transitives }}
+      - '--trace'
+      - ${{ inputs.trace }}
+      - '--github-token'
+      - ${{ inputs.githubtoken }}
+      - '--github-repo'
+      - ${{ inputs.repo }}
+      - '--github-pr'
+      - ${{ inputs.prid }}
+      - '--github-title'
+      - ${{ inputs.github-title }}
+      # https://7tonshark.com/posts/github-actions-ternary-operator/
+      # https://pablissimo.com/1137/github-actions-ternary-operators-and-default-values      
+      - '-s'
+      - ${{ inputs.fail-on-critical == 'true' && 'Critical' || ' ' }}
+      - '-s'
+      - ${{ inputs.fail-on-high == 'true' && 'High' || ' ' }}
+      - '-s'
+      - ${{ inputs.fail-on-moderate == 'true' && 'Moderate' || ' ' }}
+      - '-s'
+      - ${{ inputs.fail-on-critical == 'true' && 'Critical Bugs' || ' ' }}
+      - '-s'
+      - ${{ inputs.fail-on-legacy == 'true' && 'Legacy' || ' ' }}
+
+      
