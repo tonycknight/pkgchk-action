@@ -16,7 +16,7 @@ Once done, simply include the action in your workflow, for example:
 - uses: actions/checkout@v3
 
 - name: Run SCA
-  uses: tonycknight/pkgchk-action@dev
+  uses: tonycknight/pkgchk-action@v1.0.5
   with:
     project-path: src/testproj.csproj    
 ```
@@ -59,7 +59,7 @@ You'll need to first `checkout` the repository. The default options will scan fo
 - uses: actions/checkout@v3
 
 - name: Run SCA
-  uses: tonycknight/pkgchk-action@dev
+  uses: tonycknight/pkgchk-action@v1.0.5
   with:
     project-path: src/testproj.csproj    
 ```
@@ -72,7 +72,7 @@ Simple: ensure `vulnerable`, `deprecated` & `transitives` are `true`, that `depe
 - uses: actions/checkout@v3
 
 - name: Run SCA
-  uses: tonycknight/pkgchk-action@dev
+  uses: tonycknight/pkgchk-action@v1.0.5
   with:
     project-path: src/testproj.csproj    
     vulnerable: true
@@ -93,7 +93,7 @@ Just set `vulnerable` and `deprecated` to `false`, set `dependencies` to `true`,
 - uses: actions/checkout@v3
 
 - name: Run SCA
-  uses: tonycknight/pkgchk-action@dev
+  uses: tonycknight/pkgchk-action@v1.0.5
   with:
     project-path: src/testproj.csproj    
     dependencies: true
