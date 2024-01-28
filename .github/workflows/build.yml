@@ -5,7 +5,7 @@ on:
   workflow_dispatch:
 
 env:
-  build-version-number: 0.1.${{ github.run_number }}  
+  build-version-number: 1.0.${{ github.run_number }}  
   
 jobs:
   
