@@ -1,0 +1,29 @@
+name: Build & Release
+
+on:
+  push:
+    paths-ignore:
+      - '.github/ISSUE_TEMPLATE/**'
+      - '**/*.md'
+  pull_request:
+  workflow_dispatch:
+
+env:
+  build-version-number: 0.1.${{ github.run_number }}  
+  
+jobs:
+  
+  gh-release:
+    name: Github release
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main' 
+
+    steps:    
+      - uses: actions/checkout@v4
+
+      - name: Create Release
+        uses: ncipollo/release-action@v1
+        with:
+          tag: v${{ env.build-version-number }}
+          prerelease: true
+          generateReleaseNotes: true
