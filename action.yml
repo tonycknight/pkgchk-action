@@ -41,19 +41,19 @@ inputs:
     required: false
     default: ${{ github.event.number }}
   fail-on-critical: # id of input
-    description: 'Faiil on Critical severity vulnerabilities and packages deprecated for Critical Bugs reasons'
+    description: 'fail on Critical severity vulnerabilities and packages deprecated for Critical Bugs reasons'
     required: true
     default: true
   fail-on-high: # id of input
-    description: 'Faiil on High severity vulnerabilities'
+    description: 'fail on High severity vulnerabilities'
     required: true
     default: true
   fail-on-moderate: # id of input
-    description: 'Faiil on Moderate severity vulnerabilities'
+    description: 'fail on Moderate severity vulnerabilities'
     required: true
     default: false
   fail-on-legacy: # id of input
-    description: 'Faiil on deprecated packages for Legacy reasons'
+    description: 'fail on deprecated packages for Legacy reasons'
     required: true
     default: false
 runs:  
