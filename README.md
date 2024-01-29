@@ -1,8 +1,13 @@
 # pkgchk-action
 
-A Github action to run .net package dependency checks, and display results in a Github pull request.
+A Github action to run .net package dependency checks, and display results in your Github pull requests.
 
-This action uses a Docker image from [pkgchk-cli](https://github.com/tonycknight/pkgchk-cli) to run scans and build Github reports.
+![Vulnerabilities](./docs/Vulnerabilities1.png)
+
+![Vulnerabilities](./docs/Vulnerabilities2.png)
+
+
+This action uses a Docker image from [pkgchk-cli](https://github.com/tonycknight/pkgchk-cli).
 
 :warning: This action only works with .Net SDK 7.0.200 or higher. Check your `global.json` and other settings!
 
