@@ -5,6 +5,7 @@ on:
     paths-ignore:
       - '.github/ISSUE_TEMPLATE/**'
       - '**/*.md'
+      - '*.md'
   pull_request:
   workflow_dispatch:
 
