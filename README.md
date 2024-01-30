@@ -9,8 +9,6 @@ A Github action to run .net package dependency checks, and display results in yo
 
 This action uses a Docker image from [pkgchk-cli](https://github.com/tonycknight/pkgchk-cli).
 
-:warning: This action only works with .Net SDK 7.0.200 or higher. Check your `global.json` and other settings!
-
 ## How to use
 
 Your repository `Workflow permissions` settings should give `Read and write permissions` to the `GITHUB_TOKEN`.
@@ -21,10 +19,12 @@ Once done, simply include the action in your workflow, for example:
 - uses: actions/checkout@v3
 
 - name: Run SCA
-  uses: tonycknight/pkgchk-action@v1.0.9
+  uses: tonycknight/pkgchk-action@v1.0.10
   with:
     project-path: src/testproj.csproj    
 ```
+
+:warning: This action only works with .Net SDK 7.0.200 or higher. Check your `global.json` and other settings. 
 
 ## What the options mean
 
@@ -33,7 +33,6 @@ The main options you'll need to provide are below. Most options have defaults ap
 | The option  | What's it for?  | What's the default? |
 | - | - | - |
 | `project-path` | The relative path to the solution or project | None - this is a mandatory value. |
-| `dependencies` | Include dependencies in the scan | `false` |
 | `deprecated` | Include deprecated packages in the scan | `false` |
 | `vulnerable` | Include vulnerable packages in the scan | `true` |
 | `transitives` | Include transitive packages in the scan | `true` |
@@ -47,7 +46,7 @@ Some options are available to control the action's credentials, tracing, etc. Yo
 
 | The option  | What's it for?  | What's the default? |
 | - | - | - |
-| `githubtoken` | A github token to push reports to PRs | `github.token` |
+| `github-token` | A github token to push reports to PRs | `github.token` |
 | `repo` | The repository name in `owner/repo` form | `github.repository` |
 | `github-title` | The title to give to the PR report | `Package vulnerabilities` |
 | `prid` | The pull request ID | `github.event.number` | 
@@ -58,58 +57,36 @@ Some options are available to control the action's credentials, tracing, etc. Yo
 
 ### What's the minimum I need?
 
-You'll need to first `checkout` the repository. The default options will scan for High and Critical vulnerabilities; deprecated paackages and full dependency trees are ignored.
+You'll need to first `checkout` the repository. The default options will scan for High and Critical vulnerabilities.
 
 ```yaml
 - uses: actions/checkout@v3
 
 - name: Run SCA
-  uses: tonycknight/pkgchk-action@v1.0.9
+  uses: tonycknight/pkgchk-action@v1.0.10
   with:
     project-path: src/testproj.csproj    
 ```
 
 ### I want to scan for every possible problem
 
-Simple: ensure `vulnerable`, `deprecated` & `transitives` are `true`, that `dependencies` is false, and all the `fail-on-` options are also `true`:
+Easy: ensure `vulnerable`, `deprecated` & `transitives` are `true`, and all the `fail-on-` options are also `true`:
 
 ```yaml
 - uses: actions/checkout@v3
 
 - name: Run SCA
-  uses: tonycknight/pkgchk-action@v1.0.9
+  uses: tonycknight/pkgchk-action@v1.0.10
   with:
     project-path: src/testproj.csproj    
     vulnerable: true
     deprecated: true
     transitives: true
-    dependencies: false
     fail-on-critical: true
     fail-on-high: true
     fail-on-moderate: true
     fail-on-legacy: true
 ```
-
-### I just want a report on the dependency tree
-
-Just set `vulnerable` and `deprecated` to `false`, set `dependencies` to `true`, and give a distinct title:
-
-```yaml
-- uses: actions/checkout@v3
-
-- name: Run SCA
-  uses: tonycknight/pkgchk-action@v1.0.9
-  with:
-    project-path: src/testproj.csproj    
-    dependencies: true
-    vulnerable: false
-    deprecated: false
-    transitives: true
-    title: Dependency scan
-   
-```
-
-This will give you a separate PR report just for dependencies, as well as any vulnerability scans you might also want.
 
 ## Licence
 
