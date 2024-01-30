@@ -8,22 +8,29 @@ on:
       - '*.md'
   pull_request:
   workflow_dispatch:
-
-env:
-  build-version-number: 1.0.${{ github.run_number }}  
   
 jobs:
   
   gh-release:
     name: Github release
     runs-on: ubuntu-latest
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main' 
+    # TODO if: github.event_name == 'push' && github.ref == 'refs/heads/main' 
 
     steps:    
       - uses: actions/checkout@v4
 
+      - name: Generate build number
+        id: build_number
+        uses: onyxmueller/build-tag-number@v1
+        with:
+          token: ${{secrets.github_token}}  
+
+      - name: Set release version
+        run: echo "build-version-number=1.0.${{ steps.build_number.outputs.build_number }} " >> $GITHUB_ENV
+
       - name: Create Release
         uses: ncipollo/release-action@v1
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main' 
         with:
           tag: v${{ env.build-version-number }}
           prerelease: false

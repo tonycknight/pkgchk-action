@@ -3,11 +3,7 @@ description: 'Run .net package checks'
 inputs:
   project-path:  # id of input
     description: 'The relative path to the solution or project'
-    required: true
-  dependencies:  # id of input
-    description: 'Include dependencies in scans'
-    required: false
-    default: false
+    required: true  
   deprecated:  # id of input
     description: 'Include deprecated packages in scans'
     required: false
@@ -24,12 +20,12 @@ inputs:
     description: 'Output trace'
     required: false
     default: false
-  githubtoken: # id of input
+  github-token: # id of input
     description: 'Github token'
     required: true
     default: ${{ github.token }}
   repo: # id of input
-    description: 'The repo'
+    description: 'The repository name, as owner/repo'
     required: false
     default: ${{ github.repository }}
   github-title: # id of input
@@ -58,11 +54,9 @@ inputs:
     default: false
 runs:  
       using: 'docker'
-      image: 'docker://ghcr.io/tonycknight/pkgchk-cli:v0.2.331'
+      image: 'docker://ghcr.io/tonycknight/pkgchk-cli:v0.2.337'
       args: 
       - /github/workspace/${{ inputs.project-path }}
-      - '--dependencies'
-      - ${{ inputs.dependencies }}
       - '--deprecated'
       - ${{ inputs.deprecated }}
       - '--vulnerable'
@@ -72,7 +66,7 @@ runs:
       - '--trace'
       - ${{ inputs.trace }}
       - '--github-token'
-      - ${{ inputs.githubtoken }}
+      - ${{ inputs.github-token }}
       - '--github-repo'
       - ${{ inputs.repo }}
       - '--github-pr'
