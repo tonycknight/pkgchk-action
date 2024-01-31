@@ -16,10 +16,10 @@ Your repository `Workflow permissions` settings should give `Read and write perm
 Once done, simply include the action in your workflow, for example:
 
 ```yaml
-- uses: actions/checkout@v3
+- uses: actions/checkout@v4
 
 - name: Run SCA
-  uses: tonycknight/pkgchk-action@v1.0.10
+  uses: tonycknight/pkgchk-action@v1.0.11
   with:
     project-path: src/testproj.csproj    
 ```
@@ -46,6 +46,8 @@ Some options are available to control the action's credentials, tracing, etc. Yo
 
 | The option  | What's it for?  | What's the default? |
 | - | - | - |
+| `pass-img` | URI of a report image for successful scans | |
+| `fail-img` | URI of a report image for failed scans | |
 | `github-token` | A github token to push reports to PRs | `github.token` |
 | `repo` | The repository name in `owner/repo` form | `github.repository` |
 | `github-title` | The title to give to the PR report | `Package vulnerabilities` |
@@ -60,10 +62,10 @@ Some options are available to control the action's credentials, tracing, etc. Yo
 You'll need to first `checkout` the repository. The default options will scan for High and Critical vulnerabilities.
 
 ```yaml
-- uses: actions/checkout@v3
+- uses: actions/checkout@v4
 
 - name: Run SCA
-  uses: tonycknight/pkgchk-action@v1.0.10
+  uses: tonycknight/pkgchk-action@v1.0.11
   with:
     project-path: src/testproj.csproj    
 ```
@@ -73,10 +75,10 @@ You'll need to first `checkout` the repository. The default options will scan fo
 Easy: ensure `vulnerable`, `deprecated` & `transitives` are `true`, and all the `fail-on-` options are also `true`:
 
 ```yaml
-- uses: actions/checkout@v3
+- uses: actions/checkout@v4
 
 - name: Run SCA
-  uses: tonycknight/pkgchk-action@v1.0.10
+  uses: tonycknight/pkgchk-action@v1.0.11
   with:
     project-path: src/testproj.csproj    
     vulnerable: true
@@ -86,6 +88,21 @@ Easy: ensure `vulnerable`, `deprecated` & `transitives` are `true`, and all the 
     fail-on-high: true
     fail-on-moderate: true
     fail-on-legacy: true
+```
+
+### I want to put images on the report
+
+Simple: just set URLs to the `pass-img` and `fail-img` parameters, like so:
+
+```yaml
+- uses: actions/checkout@v4
+
+- name: Run SCA
+  uses: tonycknight/pkgchk-action@v1.0.11
+  with:
+    project-path: src/testproj.csproj    
+    pass-img: https://media.tenor.com/4h0Z--sGHgsAAAAC/jason-momoa-folding-chair.gif
+    fail-img: https://i.pinimg.com/474x/b4/74/fe/b474fe41f458a648fcfac0145a4dbd2e.jpg
 ```
 
 ## Licence
