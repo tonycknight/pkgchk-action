@@ -46,6 +46,8 @@ Some options are available to control the action's credentials, tracing, etc. Yo
 
 | The option  | What's it for?  | What's the default? |
 | - | - | - |
+| `pass-img` | URI of a report image for successful scans | |
+| `fail-img` | URI of a report image for failed scans | |
 | `github-token` | A github token to push reports to PRs | `github.token` |
 | `repo` | The repository name in `owner/repo` form | `github.repository` |
 | `github-title` | The title to give to the PR report | `Package vulnerabilities` |

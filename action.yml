@@ -52,9 +52,17 @@ inputs:
     description: 'fail on packages deprecated for Legacy reasons'
     required: true
     default: false
+  pass-img: # id of input
+    description: 'URI of an image for successful scans'
+    required: false
+    default: ''
+  fail-img: # id of input
+    description: 'URI of an image for failed scans'
+    required: false
+    default: ''
 runs:  
       using: 'docker'
-      image: 'docker://ghcr.io/tonycknight/pkgchk-cli:v0.2.337'
+      image: 'docker://ghcr.io/tonycknight/pkgchk-cli:v0.2.339-preview'
       args: 
       - /github/workspace/${{ inputs.project-path }}
       - '--deprecated'
@@ -73,6 +81,10 @@ runs:
       - ${{ inputs.prid }}
       - '--github-title'
       - ${{ inputs.github-title }}
+      - '--pass-img'
+      - ${{ inputs.pass-img }}
+      - '--fail-img'
+      - ${{ inputs.fail-img }}
       # https://7tonshark.com/posts/github-actions-ternary-operator/
       # https://pablissimo.com/1137/github-actions-ternary-operators-and-default-values      
       - '-s'
