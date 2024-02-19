@@ -1,7 +1,9 @@
-name: Build & Release
+name: Release
 
 on:
   push:
+    tags:        
+      - '*'           # Push events to every tag not containing /
     paths-ignore:
       - '.github/ISSUE_TEMPLATE/**'
       - '**/*.md'
@@ -14,7 +16,7 @@ jobs:
   gh-release:
     name: Github release
     runs-on: ubuntu-latest
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main' 
+    # if: github.event_name == 'push' && github.ref == 'refs/heads/main' 
 
     steps:    
       - uses: actions/checkout@v4
@@ -31,6 +33,6 @@ jobs:
       - name: Create Release
         uses: ncipollo/release-action@v1
         with:
-          tag: v${{ env.build-version-number }}
+          # tag: v${{ env.build-version-number }}
           prerelease: false
           generateReleaseNotes: true
