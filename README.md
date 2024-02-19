@@ -19,7 +19,7 @@ Once done, simply include the action in your workflow, for example:
 - uses: actions/checkout@v4
 
 - name: Run SCA
-  uses: tonycknight/pkgchk-action@v1.0.11
+  uses: tonycknight/pkgchk-action@v1.0.12
   with:
     project-path: src/testproj.csproj    
 ```
@@ -65,7 +65,7 @@ You'll need to first `checkout` the repository. The default options will scan fo
 - uses: actions/checkout@v4
 
 - name: Run SCA
-  uses: tonycknight/pkgchk-action@v1.0.11
+  uses: tonycknight/pkgchk-action@v1.0.12
   with:
     project-path: src/testproj.csproj    
 ```
@@ -78,7 +78,7 @@ Easy: ensure `vulnerable`, `deprecated` & `transitives` are `true`, and all the 
 - uses: actions/checkout@v4
 
 - name: Run SCA
-  uses: tonycknight/pkgchk-action@v1.0.11
+  uses: tonycknight/pkgchk-action@v1.0.12
   with:
     project-path: src/testproj.csproj    
     vulnerable: true
@@ -98,7 +98,7 @@ Simple: just set URLs to the `pass-img` and `fail-img` parameters, like so:
 - uses: actions/checkout@v4
 
 - name: Run SCA
-  uses: tonycknight/pkgchk-action@v1.0.11
+  uses: tonycknight/pkgchk-action@v1.0.12
   with:
     project-path: src/testproj.csproj    
     pass-img: https://media.tenor.com/4h0Z--sGHgsAAAAC/jason-momoa-folding-chair.gif
