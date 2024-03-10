@@ -1,5 +1,5 @@
 name: 'pkgchk'
-description: 'Run .net package checks'
+description: 'An Action for .Net package dependency checks & PRs.'
 inputs:
   project-path:  # id of input
     description: 'The relative path to the solution or project'
