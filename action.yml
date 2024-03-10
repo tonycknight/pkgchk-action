@@ -36,6 +36,10 @@ inputs:
     description: 'The pull request ID'
     required: false
     default: ${{ github.event.number }}
+  commit-hash: # id of input
+    description: 'The commit hash'
+    required: false
+    default: ${{ github.sha }}
   fail-on-critical: # id of input
     description: 'fail on Critical severity vulnerabilities and packages deprecated for Critical Bugs reasons'
     required: true
@@ -62,7 +66,7 @@ inputs:
     default: ''
 runs:  
       using: 'docker'
-      image: 'docker://ghcr.io/tonycknight/pkgchk-cli:v0.2.375'
+      image: 'docker://ghcr.io/tonycknight/pkgchk-cli:v0.2.385'
       args: 
       - /github/workspace/${{ inputs.project-path }}
       - '--deprecated'
@@ -79,6 +83,8 @@ runs:
       - ${{ inputs.repo }}
       - '--github-pr'
       - ${{ inputs.prid }}
+      - '--github-commit'
+      - ${{ inputs.commit-hash }}
       - '--github-title'
       - ${{ inputs.github-title }}
       - '--pass-img'
