@@ -1,5 +1,6 @@
 name: 'pkgchk'
 description: 'An Action for .Net package dependency checks & PRs.'
+author: "tonycknight"
 inputs:
   project-path:  # id of input
     description: 'The relative path to the solution or project'
@@ -103,5 +104,7 @@ runs:
       - ${{ inputs.fail-on-critical == 'true' && 'Critical Bugs' || ' ' }}
       - '-s'
       - ${{ inputs.fail-on-legacy == 'true' && 'Legacy' || ' ' }}
-
+branding:
+  icon: 'shield'
+  color: 'green'
       
