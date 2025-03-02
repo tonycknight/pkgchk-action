@@ -67,8 +67,9 @@ inputs:
     default: ''
 runs:  
       using: 'docker'
-      image: 'docker://ghcr.io/tonycknight/pkgchk-cli:v0.2.388'
+      image: 'docker://ghcr.io/tonycknight/pkgchk-cli:v0.3.410'
       args: 
+      - scan
       - /github/workspace/${{ inputs.project-path }}
       - '--deprecated'
       - ${{ inputs.deprecated }}
