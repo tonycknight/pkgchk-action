@@ -66,45 +66,21 @@ inputs:
     required: false
     default: ''
 runs:  
-      using: 'docker'
-      image: 'docker://ghcr.io/tonycknight/pkgchk-cli:v0.3.410'
-      args: 
-      - scan
-      - /github/workspace/${{ inputs.project-path }}
-      - '--deprecated'
-      - ${{ inputs.deprecated }}
-      - '--vulnerable'
-      - ${{ inputs.vulnerable }}
-      - '--transitive'
-      - ${{ inputs.transitives }}
-      - '--trace'
-      - ${{ inputs.trace }}
-      - '--github-token'
-      - ${{ inputs.github-token }}
-      - '--github-repo'
-      - ${{ inputs.repo }}
-      - '--github-pr'
-      - ${{ inputs.prid }}
-      - '--github-commit'
-      - ${{ inputs.commit-hash }}
-      - '--github-title'
-      - ${{ inputs.github-title }}
-      - '--pass-img'
-      - ${{ inputs.pass-img }}
-      - '--fail-img'
-      - ${{ inputs.fail-img }}
-      # https://7tonshark.com/posts/github-actions-ternary-operator/
-      # https://pablissimo.com/1137/github-actions-ternary-operators-and-default-values      
-      - '-s'
-      - ${{ inputs.fail-on-critical == 'true' && 'Critical' || ' ' }}
-      - '-s'
-      - ${{ inputs.fail-on-high == 'true' && 'High' || ' ' }}
-      - '-s'
-      - ${{ inputs.fail-on-moderate == 'true' && 'Moderate' || ' ' }}
-      - '-s'
-      - ${{ inputs.fail-on-critical == 'true' && 'Critical Bugs' || ' ' }}
-      - '-s'
-      - ${{ inputs.fail-on-legacy == 'true' && 'Legacy' || ' ' }}
+      using: 'composite'
+      steps:
+        - name: Restore tools
+          run: dotnet tool restore
+
+        - name: Install tool 
+          run: dotnet tool install pkgchk-cli --local  --create-manifest-if-needed
+
+        - name: Restore solution
+          run: dotnet restore
+          
+        - name: Scan for vulnerabilities
+          run: |
+            dotnet pkgchk scan /github/workspace/${{ inputs.project-path }} --deprecated ${{ inputs.deprecated }} --vulnerable ${{ inputs.vulnerable }} --transitive ${{ inputs.transitives }} --trace ${{ inputs.trace }} --github-token ${{ inputs.github-token }} --github-repo ${{ inputs.repo }} --github-pr ${{ inputs.prid }} --github-commit ${{ inputs.commit-hash }} --github-title ${{ inputs.github-title }} --pass-img ${{ inputs.pass-img }} --fail-img ${{ inputs.fail-img }} -s ${{ inputs.fail-on-critical == 'true' && 'Critical' || ' ' }} -s ${{ inputs.fail-on-high == 'true' && 'High' || ' ' }} -s ${{ inputs.fail-on-moderate == 'true' && 'Moderate' || ' ' }} -s ${{ inputs.fail-on-critical == 'true' && 'Critical Bugs' || ' ' }}  -s ${{ inputs.fail-on-legacy == 'true' && 'Legacy' || ' ' }}
+
 branding:
   icon: 'shield'
   color: 'green'
