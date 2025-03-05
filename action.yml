@@ -69,17 +69,21 @@ runs:
       using: 'composite'
       steps:
         - name: Restore tools
+          shell: bash
           run: dotnet tool restore
 
         - name: Restore solution
+          shell: bash
           # if we're given a ${{ inputs.project-path }}, otherwise run dotnet restore
           run: dotnet restore /github/workspace/${{ inputs.project-path }}
 
         - name: Install tool 
+          shell: bash
           # TODO: need a version!
           run: dotnet tool install pkgchk-cli --local  --create-manifest-if-needed
           
         - name: Scan for vulnerabilities
+          shell: bash          
           # TODO: if we're given a project path?
           run: |
             dotnet pkgchk scan /github/workspace/${{ inputs.project-path }} --deprecated ${{ inputs.deprecated }} --vulnerable ${{ inputs.vulnerable }} --transitive ${{ inputs.transitives }} --trace ${{ inputs.trace }} --github-token ${{ inputs.github-token }} --github-repo ${{ inputs.repo }} --github-pr ${{ inputs.prid }} --github-commit ${{ inputs.commit-hash }} --github-title ${{ inputs.github-title }} --pass-img ${{ inputs.pass-img }} --fail-img ${{ inputs.fail-img }} -s ${{ inputs.fail-on-critical == 'true' && 'Critical' || ' ' }} -s ${{ inputs.fail-on-high == 'true' && 'High' || ' ' }} -s ${{ inputs.fail-on-moderate == 'true' && 'Moderate' || ' ' }} -s ${{ inputs.fail-on-critical == 'true' && 'Critical Bugs' || ' ' }}  -s ${{ inputs.fail-on-legacy == 'true' && 'Legacy' || ' ' }}
