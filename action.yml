@@ -91,7 +91,7 @@ runs:
           # --github-pr ${{ inputs.prid }} missing
           # -s ${{ inputs.fail-on-critical == 'true' && 'Critical' || ' ' }} -s ${{ inputs.fail-on-high == 'true' && 'High' || ' ' }} -s ${{ inputs.fail-on-moderate == 'true' && 'Moderate' || ' ' }} -s ${{ inputs.fail-on-critical == 'true' && 'Critical Bugs' || ' ' }}  -s ${{ inputs.fail-on-legacy == 'true' && 'Legacy' || ' ' }}
           run: |
-            dotnet pkgchk scan ./${{ inputs.project-path }} --deprecated ${{ inputs.deprecated }} --vulnerable ${{ inputs.vulnerable }} --transitive ${{ inputs.transitives }} --trace ${{ inputs.trace }} --github-token ${{ inputs.github-token }} --github-repo ${{ inputs.repo }}  --github-commit ${{ inputs.commit-hash }} --github-title "${{ inputs.github-title }}" --pass-img "${{ inputs.pass-img }}" --fail-img "${{ inputs.fail-img }}"  --github-pr ${{ inputs.prid }} 
+            dotnet pkgchk scan ./${{ inputs.project-path }} --deprecated ${{ inputs.deprecated }} --vulnerable ${{ inputs.vulnerable }} --transitive ${{ inputs.transitives }} --trace ${{ inputs.trace }} --github-token ${{ inputs.github-token }} --github-repo ${{ inputs.repo }}  --github-commit ${{ inputs.commit-hash }} --github-title "${{ inputs.github-title }}" --pass-img "${{ inputs.pass-img }}" --fail-img "${{ inputs.fail-img }}" 
 
 branding:
   icon: 'shield'
