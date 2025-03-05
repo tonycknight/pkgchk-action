@@ -68,8 +68,8 @@ inputs:
 runs:  
       using: 'composite'
       steps:
-        - name: Setup .NET SDK
-          uses: actions/setup-dotnet@v4
+        #- name: Setup .NET SDK
+        #  uses: actions/setup-dotnet@v4
 
         - name: Restore tools
           shell: bash
