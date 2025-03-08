@@ -2,92 +2,86 @@ name: 'pkgchk'
 description: 'An Action for .Net package dependency checks & PRs.'
 author: "tonycknight"
 inputs:
-  project-path:  # id of input
+  project-path:  
     description: 'The relative path to the solution or project'
     required: true  
-  deprecated:  # id of input
+  deprecated:  
     description: 'Include deprecated packages in scans'
     required: false
     default: false    
-  vulnerable: # id of input
+  vulnerable: 
     description: 'Include vulneraeble packages in scans'
     required: false
     default: true
-  transitives: # id of input
+  transitives: 
     description: 'Include transitive packages in scans'
     required: false
     default: true
-  trace: # id of input
+  trace: 
     description: 'Output trace'
     required: false
     default: false
-  github-token: # id of input
+  github-token: 
     description: 'Github token'
     required: true
     default: ${{ github.token }}
-  repo: # id of input
+  repo: 
     description: 'The repository name, as owner/repo'
     required: false
     default: ${{ github.repository }}
-  github-title: # id of input
+  github-title: 
     description: 'The report title'
     required: false
     default: 'Package vulnerabilities'
-  prid: # id of input
+  prid: 
     description: 'The pull request ID'
     required: false
     default: ${{ github.event.number }}
-  commit-hash: # id of input
+  commit-hash: 
     description: 'The commit hash'
     required: false
     default: ${{ github.sha }}
-  fail-on-critical: # id of input
+  fail-on-critical: 
     description: 'fail on Critical severity vulnerabilities and packages deprecated for Critical Bugs reasons'
     required: true
     default: true
-  fail-on-high: # id of input
+  fail-on-high: 
     description: 'fail on High severity vulnerabilities'
     required: true
     default: true
-  fail-on-moderate: # id of input
+  fail-on-moderate: 
     description: 'fail on Moderate severity vulnerabilities'
     required: true
     default: false
-  fail-on-legacy: # id of input
+  fail-on-legacy: 
     description: 'fail on packages deprecated for Legacy reasons'
     required: true
     default: false
-  pass-img: # id of input
+  pass-img: 
     description: 'URI of an image for successful scans'
     required: false
     default: ''
-  fail-img: # id of input
+  fail-img: 
     description: 'URI of an image for failed scans'
     required: false
     default: ''
 runs:  
       using: 'composite'
       steps:
-        #- name: Setup .NET SDK
-        #  uses: actions/setup-dotnet@v4
-
         - name: Restore tools
           shell: bash
           run: dotnet tool restore
 
         - name: Restore solution
           shell: bash
-          # if we're given a ${{ inputs.project-path }}, otherwise run dotnet restore
           run: dotnet restore ./${{ inputs.project-path }}
 
         - name: Install tool 
           shell: bash
-          # TODO: need a version!
-          run: dotnet tool install pkgchk-cli --local  --create-manifest-if-needed
+          run: dotnet tool install pkgchk-cli --version 0.3.410 --local  --create-manifest-if-needed
           
         - name: Scan for vulnerabilities
           shell: bash          
-          # TODO: if we're given a project path?          
           run: |
             dotnet pkgchk scan ./${{ inputs.project-path }} --deprecated ${{ inputs.deprecated }} --vulnerable ${{ inputs.vulnerable }} --transitive ${{ inputs.transitives }} --trace ${{ inputs.trace }} --github-token ${{ inputs.github-token }} --github-repo ${{ inputs.repo }}  --github-commit ${{ inputs.commit-hash }} --github-title "${{ inputs.github-title }}" --pass-img "${{ inputs.pass-img }}" --fail-img "${{ inputs.fail-img }}"  --github-pr "${{ inputs.prid }}" -s "${{ inputs.fail-on-critical == 'true' && 'Critical' || ' ' }}" -s "${{ inputs.fail-on-high == 'true' && 'High' || ' ' }}" -s "${{ inputs.fail-on-moderate == 'true' && 'Moderate' || ' ' }}" -s "${{ inputs.fail-on-critical == 'true' && 'Critical Bugs' || ' ' }}"  -s "${{ inputs.fail-on-legacy == 'true' && 'Legacy' || ' ' }}"
 
