@@ -74,7 +74,7 @@ runs:
       steps:
         - name: Restore tools
           shell: bash
-          if: ${{ inputs.tool-restore }}
+          if: ${{ inputs.tool-restore == 'true' }}
           run: dotnet tool restore
             
         - name: Restore solution
