@@ -71,7 +71,8 @@ runs:
         - name: Restore tools
           shell: bash
           run: |
-            if True then
+            if True 
+            then
               dotnet tool restore
             fi
 
