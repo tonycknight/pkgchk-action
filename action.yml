@@ -65,8 +65,12 @@ inputs:
     description: 'URI of an image for failed scans'
     required: false
     default: ''
+  solution-restore: 
+    description: 'Restore solution'
+    required: false
+    default: true
   tool-restore: 
-    description: 'Restore toold'
+    description: 'Restore tools'
     required: false
     default: true
 runs:  
@@ -79,6 +83,7 @@ runs:
             
         - name: Restore solution
           shell: bash
+          if: ${{ inputs.solution-restore == 'true' }}
           run: dotnet restore ./${{ inputs.project-path }}
 
         - name: Install tool 
