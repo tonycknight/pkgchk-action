@@ -25,7 +25,7 @@ Use the step in your PR checks, or in your regular build workflow checks:
 ![Checks](./docs/WorkflowChecks1.png)
 
 
-:warning: This action only works with .Net SDK 7.0.200 or higher. Check your `global.json` and other settings to avoid incompatibilities.
+:warning: This action only works with .Net SDK 8. Check your `global.json` and other settings to avoid incompatibilities.
 
 ## What the options mean
 
@@ -119,8 +119,6 @@ Simple: just set URLs to the `pass-img` and `fail-img` parameters, like so:
 ## Licence
 
 `pkgchk-action` is licenced under MIT.
-
-This action uses a Docker image from [pkgchk-cli](https://github.com/tonycknight/pkgchk-cli).
 
 For `pkgchk-cli` refer to [its own licencing](https://github.com/tonycknight/pkgchk-cli).
 
