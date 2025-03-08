@@ -43,6 +43,8 @@ The main options you'll need to provide are below. Most options have defaults ap
 | `fail-on-legacy` | Fail scans if packages are found to be deprecated for legacy reasons | `false` |
 | `pass-img` | URI of a report image for successful scans | |
 | `fail-img` | URI of a report image for failed scans | |
+| `restore-solution` | Restore the solution or project | `true` |
+| `restore-tools` | Restore tools | `true` |
 
 Some options are available to control the action's credentials, tracing, etc. You shouldn't need to use this in most cases.
 
