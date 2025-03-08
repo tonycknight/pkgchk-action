@@ -70,7 +70,10 @@ runs:
       steps:
         - name: Restore tools
           shell: bash
-          run: dotnet tool restore
+          run: |
+            if true then
+              dotnet tool restore
+            fi
 
         - name: Restore solution
           shell: bash
