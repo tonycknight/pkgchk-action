@@ -17,7 +17,7 @@ Once done, simply include the action in your workflow like so:
 - uses: actions/checkout@v4
 
 - name: Run SCA
-  uses: tonycknight/pkgchk-action@v1.0.18
+  uses: tonycknight/pkgchk-action@v1.0.19
 ```
 
 Use the step in your PR checks, or in your regular build workflow checks:
@@ -25,7 +25,7 @@ Use the step in your PR checks, or in your regular build workflow checks:
 ![Checks](./docs/WorkflowChecks1.png)
 
 
-:warning: This action only works with .Net SDK 7.0.200 or higher. Check your `global.json` and other settings to avoid incompatibilities.
+:warning: This action only works with .Net SDK 8. Check your `global.json` and other settings to avoid incompatibilities.
 
 ## What the options mean
 
@@ -43,6 +43,8 @@ The main options you'll need to provide are below. Most options have defaults ap
 | `fail-on-legacy` | Fail scans if packages are found to be deprecated for legacy reasons | `false` |
 | `pass-img` | URI of a report image for successful scans | |
 | `fail-img` | URI of a report image for failed scans | |
+| `restore-solution` | Restore the solution or project | `true` |
+| `restore-tools` | Restore tools | `true` |
 
 Some options are available to control the action's credentials, tracing, etc. You shouldn't need to use this in most cases.
 
@@ -66,7 +68,7 @@ You'll need to first `checkout` the repository. The default options will scan fo
 - uses: actions/checkout@v4
 
 - name: Run SCA
-  uses: tonycknight/pkgchk-action@v1.0.18
+  uses: tonycknight/pkgchk-action@v1.0.19
 ```
 
 ### I want to scan a specific project
@@ -75,7 +77,7 @@ You'll need to first `checkout` the repository. The default options will scan fo
 - uses: actions/checkout@v4
 
 - name: Run SCA
-  uses: tonycknight/pkgchk-action@v1.0.18
+  uses: tonycknight/pkgchk-action@v1.0.19
   with:
     project-path: src/testproj.csproj
 ```
@@ -88,7 +90,7 @@ Easy: ensure `vulnerable`, `deprecated` & `transitives` are `true`, and all the 
 - uses: actions/checkout@v4
 
 - name: Run SCA
-  uses: tonycknight/pkgchk-action@v1.0.18
+  uses: tonycknight/pkgchk-action@v1.0.19
   with:
     vulnerable: true
     deprecated: true
@@ -107,18 +109,33 @@ Simple: just set URLs to the `pass-img` and `fail-img` parameters, like so:
 - uses: actions/checkout@v4
 
 - name: Run SCA
-  uses: tonycknight/pkgchk-action@v1.0.18
+  uses: tonycknight/pkgchk-action@v1.0.19
   with:
     pass-img: https://media.tenor.com/4h0Z--sGHgsAAAAC/jason-momoa-folding-chair.gif
     fail-img: https://i.pinimg.com/474x/b4/74/fe/b474fe41f458a648fcfac0145a4dbd2e.jpg
 ```
 
+### I have a private nuget repository
+
+[Set up .net](https://github.com/actions/setup-dotnet?tab=readme-ov-file#setting-up-authentication-for-nuget-feeds) before scanning:
+
+```yaml
+- uses: actions/checkout@v4
+
+- name: Add nuget source
+  uses: actions/setup-dotnet@v4
+  with:
+    source-url: https://nuget.pkg.github.com/<owner>/index.json
+  env:
+    NUGET_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
+
+- name: Run SCA
+  uses: tonycknight/pkgchk-action@v1.0.19  
+```
 
 ## Licence
 
 `pkgchk-action` is licenced under MIT.
-
-This action uses a Docker image from [pkgchk-cli](https://github.com/tonycknight/pkgchk-cli).
 
 For `pkgchk-cli` refer to [its own licencing](https://github.com/tonycknight/pkgchk-cli).
 
