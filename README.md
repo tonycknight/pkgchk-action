@@ -115,6 +115,23 @@ Simple: just set URLs to the `pass-img` and `fail-img` parameters, like so:
     fail-img: https://i.pinimg.com/474x/b4/74/fe/b474fe41f458a648fcfac0145a4dbd2e.jpg
 ```
 
+### I have a private nuget repository
+
+[Set up .net](https://github.com/actions/setup-dotnet?tab=readme-ov-file#setting-up-authentication-for-nuget-feeds) before scanning:
+
+```yaml
+- uses: actions/checkout@v4
+
+- name: Add nuget source
+  uses: actions/setup-dotnet@v4
+  with:
+    source-url: https://nuget.pkg.github.com/<owner>/index.json
+  env:
+    NUGET_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
+
+- name: Run SCA
+  uses: tonycknight/pkgchk-action@v1.0.19  
+```
 
 ## Licence
 
