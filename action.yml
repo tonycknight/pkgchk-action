@@ -10,7 +10,7 @@ inputs:
     required: false
     default: false    
   vulnerable: 
-    description: 'Include vulneraeble packages in scans'
+    description: 'Include vulnerable packages in scans'
     required: false
     default: true
   transitives: 
