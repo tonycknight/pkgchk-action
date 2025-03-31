@@ -54,7 +54,7 @@ inputs:
     required: true
     default: false
   fail-on-legacy: 
-    description: 'fail on packages deprecated for Legacy reasons'
+    description: 'fail on packages deprecated for Legacy reasons, such as package deprecation.'
     required: true
     default: false
   pass-img: 
