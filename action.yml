@@ -10,7 +10,7 @@ inputs:
     required: false
     default: false    
   vulnerable: 
-    description: 'Include vulneraeble packages in scans'
+    description: 'Include vulnerable packages in scans'
     required: false
     default: true
   transitives: 
@@ -54,7 +54,7 @@ inputs:
     required: true
     default: false
   fail-on-legacy: 
-    description: 'fail on packages deprecated for Legacy reasons'
+    description: 'fail on packages deprecated for Legacy reasons, such as package deprecation.'
     required: true
     default: false
   pass-img: 
@@ -88,7 +88,7 @@ runs:
 
         - name: Install tool 
           shell: bash
-          run: dotnet tool install pkgchk-cli --version 0.3.410 --local  --create-manifest-if-needed
+          run: dotnet tool install pkgchk-cli --version 0.3.438 --local  --create-manifest-if-needed
           
         - name: Scan for vulnerabilities
           shell: bash          
