@@ -17,7 +17,7 @@ Once done, simply include the action in your workflow like so:
 - uses: actions/checkout@v4
 
 - name: Run SCA
-  uses: tonycknight/pkgchk-action@v1.0.20
+  uses: tonycknight/pkgchk-action@v1
 ```
 
 Use the step in your PR checks, or in your regular build workflow checks:
@@ -68,7 +68,7 @@ You'll need to first `checkout` the repository. The default options will scan fo
 - uses: actions/checkout@v4
 
 - name: Run SCA
-  uses: tonycknight/pkgchk-action@v1.0.20
+  uses: tonycknight/pkgchk-action@v1
 ```
 
 ### I want to scan a specific project
@@ -77,7 +77,7 @@ You'll need to first `checkout` the repository. The default options will scan fo
 - uses: actions/checkout@v4
 
 - name: Run SCA
-  uses: tonycknight/pkgchk-action@v1.0.20
+  uses: tonycknight/pkgchk-action@v1
   with:
     project-path: src/testproj.csproj
 ```
@@ -90,7 +90,7 @@ Easy: ensure `vulnerable`, `deprecated` & `transitives` are `true`, and all the 
 - uses: actions/checkout@v4
 
 - name: Run SCA
-  uses: tonycknight/pkgchk-action@v1.0.20
+  uses: tonycknight/pkgchk-action@v1
   with:
     vulnerable: true
     deprecated: true
@@ -109,7 +109,7 @@ Simple: just set URLs to the `pass-img` and `fail-img` parameters, like so:
 - uses: actions/checkout@v4
 
 - name: Run SCA
-  uses: tonycknight/pkgchk-action@v1.0.20
+  uses: tonycknight/pkgchk-action@v1
   with:
     pass-img: https://media.tenor.com/4h0Z--sGHgsAAAAC/jason-momoa-folding-chair.gif
     fail-img: https://i.pinimg.com/474x/b4/74/fe/b474fe41f458a648fcfac0145a4dbd2e.jpg
@@ -130,7 +130,7 @@ Simple: just set URLs to the `pass-img` and `fail-img` parameters, like so:
     NUGET_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
 - name: Run SCA
-  uses: tonycknight/pkgchk-action@v1.0.20  
+  uses: tonycknight/pkgchk-action@v1
 ```
 
 ## Licence
