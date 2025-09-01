@@ -16,6 +16,6 @@ jobs:
           fetch-depth: 0
 
       - name: Tag release
-        users: stevenjdh/action-tagger@v1
+        uses: stevenjdh/action-tagger@v1
         with:
           set-latest-tag: true
