@@ -5,8 +5,8 @@ on:
 jobs:
   tagger:
     name: Release tagging
-    runs-=on: ubuntu-latest
-    perimssions:
+    runs-on: ubuntu-latest
+    permissions:
       contents: write
 
     steps:
