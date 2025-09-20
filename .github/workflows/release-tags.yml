@@ -1,3 +1,5 @@
+name: Release Tags
+
 on:
   release:
     types: [released, edited]
