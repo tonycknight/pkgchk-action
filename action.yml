@@ -88,7 +88,7 @@ runs:
 
         - name: Install tool 
           shell: bash
-          run: dotnet tool install pkgchk-cli --version 0.3.523 --local  --create-manifest-if-needed
+          run: dotnet tool install pkgchk-cli --version 0.3.542 --local  --create-manifest-if-needed
           
         - name: Scan for vulnerabilities
           shell: bash          
