@@ -108,7 +108,7 @@ runs:
           
         - name: Scan for vulnerabilities
           id: scanVulnerabilities
-          shell: bash          
+          shell: bash
           if: ${{ inputs.scan-issues == 'true' }}
           continue-on-error: true # TODO: this causes the overall flow to NOT be marked as failed.
           run: |
@@ -116,18 +116,15 @@ runs:
 
         - name: Scan for upgrades
           id: scanUpgrades
-          shell: bash          
+          shell: bash
           if: ${{ inputs.scan-upgrades == 'true' }}
           continue-on-error: true # TODO: this causes the overall flow to NOT be marked as failed.
           run: |
             dotnet pkgchk upgrades ./${{ inputs.project-path }} --trace ${{ inputs.trace }} --github-token ${{ inputs.github-token }} --github-repo ${{ inputs.repo }}  --github-commit ${{ inputs.commit-hash }} --github-title "${{ inputs.github-upgrade-title }}" --pass-img "${{ inputs.pass-img }}" --fail-img "${{ inputs.fail-img }}"  --github-pr "${{ inputs.prid }}" --break-on-upgrades "${{ inputs.fail-on-upgrades }}"
 
         - name: Consolidate results
-          if : steps.scanVulnerabilities.outcome == 'failure'
-          run: exit 1
-
-        - name: Consolidate results
-          if : steps.scanUpgrades.outcome == 'failure'
+          if : steps.scanVulnerabilities.outcome == 'failure' || steps.scanUpgrades.outcome == 'failure'
+          shell: bash
           run: exit 1
 
 branding:
