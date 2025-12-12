@@ -112,7 +112,7 @@ runs:
           shell: bash          
           if: ${{ inputs.scan-upgrades == 'true' }}
           run: |
-            dotnet pkgchk upgrades ./${{ inputs.project-path }} --trace ${{ inputs.trace }} --github-token ${{ inputs.github-token }} --github-repo ${{ inputs.repo }}  --github-commit ${{ inputs.commit-hash }} --github-title "${{ inputs.github-title }}" --pass-img "${{ inputs.pass-img }}" --fail-img "${{ inputs.fail-img }}"  --github-pr "${{ inputs.prid }}" --break-on-upgrades "${{ fail-on-upgrades }}"
+            dotnet pkgchk upgrades ./${{ inputs.project-path }} --trace ${{ inputs.trace }} --github-token ${{ inputs.github-token }} --github-repo ${{ inputs.repo }}  --github-commit ${{ inputs.commit-hash }} --github-title "${{ inputs.github-title }}" --pass-img "${{ inputs.pass-img }}" --fail-img "${{ inputs.fail-img }}"  --github-pr "${{ inputs.prid }}" --break-on-upgrades "${{ inputs.fail-on-upgrades }}"
 
 branding:
   icon: 'shield'
