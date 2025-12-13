@@ -14,11 +14,11 @@ inputs:
     required: false
     default: false
   deprecated:  
-    description: 'Include deprecated packages in scans'
+    description: 'Scan for deprecated packages'
     required: false
     default: false    
   vulnerable: 
-    description: 'Include vulnerable packages in scans'
+    description: 'Scan for vulnerable packages'
     required: false
     default: true
   transitives: 
@@ -26,11 +26,11 @@ inputs:
     required: false
     default: true
   trace: 
-    description: 'Output trace'
+    description: 'Output trace to logs'
     required: false
     default: false
   github-token: 
-    description: 'Github token'
+    description: 'GitHub token'
     required: true
     default: ${{ github.token }}
   repo: 
@@ -46,11 +46,11 @@ inputs:
     required: false
     default: 'Package upgrades'
   prid: 
-    description: 'The pull request ID'
+    description: 'The GitHub pull request ID'
     required: false
     default: ${{ github.event.number }}
   commit-hash: 
-    description: 'The commit hash'
+    description: 'The GitHub commit hash'
     required: false
     default: ${{ github.sha }}
   fail-on-critical: 
@@ -111,13 +111,13 @@ runs:
 
         - name: Install tool 
           shell: bash
-          run: dotnet tool install pkgchk-cli --version 0.3.567-preview --local  --create-manifest-if-needed
+          run: dotnet tool install pkgchk-cli --version 0.3.569 --local  --create-manifest-if-needed
           
         - name: Scan for vulnerabilities
           id: scanVulnerabilities
           shell: bash
           if: ${{ inputs.scan-issues == 'true' }}
-          continue-on-error: true # TODO: this causes the overall flow to NOT be marked as failed.
+          continue-on-error: true
           run: |
             dotnet pkgchk scan ./${{ inputs.project-path }} --deprecated ${{ inputs.deprecated }} --vulnerable ${{ inputs.vulnerable }} --transitive ${{ inputs.transitives }} --trace ${{ inputs.trace }} --github-token ${{ inputs.github-token }} --github-repo ${{ inputs.repo }}  --github-commit ${{ inputs.commit-hash }} --github-title "${{ inputs.github-title }}" --pass-img "${{ inputs.pass-img }}" --fail-img "${{ inputs.fail-img }}"  --github-pr "${{ inputs.prid }}" -s "${{ inputs.fail-on-critical == 'true' && 'Critical' || ' ' }}" -s "${{ inputs.fail-on-high == 'true' && 'High' || ' ' }}" -s "${{ inputs.fail-on-moderate == 'true' && 'Moderate' || ' ' }}" -s "${{ inputs.fail-on-critical == 'true' && 'Critical Bugs' || ' ' }}"  -s "${{ inputs.fail-on-legacy == 'true' && 'Legacy' || ' ' }}"
 
@@ -125,7 +125,7 @@ runs:
           id: scanUpgrades
           shell: bash
           if: ${{ inputs.scan-upgrades == 'true' }}
-          continue-on-error: true # TODO: this causes the overall flow to NOT be marked as failed.
+          continue-on-error: true
           run: |
             dotnet pkgchk upgrades ./${{ inputs.project-path }} --trace ${{ inputs.trace }} --github-token ${{ inputs.github-token }} --github-repo ${{ inputs.repo }}  --github-commit ${{ inputs.commit-hash }} --github-title "${{ inputs.github-upgrade-title }}" --pass-img "${{ inputs.pass-img }}" --fail-img "${{ inputs.fail-img }}"  --github-pr "${{ inputs.prid }}" --break-on-upgrades "${{ inputs.fail-on-upgrades }}"
 
