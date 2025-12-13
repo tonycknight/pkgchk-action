@@ -92,6 +92,13 @@ inputs:
 runs:  
       using: 'composite'
       steps:
+        - name: Check parameters
+          if: inputs.scan-issues == 'false' &&  inputs.scan-upgrades == 'false'
+          shell: bash
+          run: |
+            echo "At least one of scan-issues or scan-upgrades must be true."
+            exit 1
+          
         - name: Restore tools
           shell: bash
           if: ${{ inputs.restore-tools == 'true' }}
