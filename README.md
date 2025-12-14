@@ -49,7 +49,7 @@ If you want to check for outstanding upgrades, these additional options are avai
 
 | The option  | What's it for?  | What's the default? |
 | - | - | - |
-| `scan-upgrades` | To scan for upgrades | 'false' |
+| `scan-upgrades` | To scan for upgrades | `false` |
 | `fail-on-upgrades` | Set to `true` to stop builds with outstanding upgrades. | `false` |
 | `github-upgrade-title` | The title to give to the PR upgrades report | `Package upgrades` |
 
