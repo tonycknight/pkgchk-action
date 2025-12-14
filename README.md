@@ -9,9 +9,7 @@ A Github action to perform .Net package dependency checks & PRs.
 
 ## How to use
 
-Your repository `Workflow permissions` settings should give `Read and write permissions` to the `GITHUB_TOKEN`.
-
-Once done, simply include the action in your workflow like so:
+Simply include the action in your workflow like so:
 
 ```yaml
 - uses: actions/checkout@v4
@@ -24,8 +22,11 @@ Use the step in your PR checks, or in your regular build workflow checks:
 
 ![Checks](./docs/WorkflowChecks1.png)
 
+Outstanding upgrades can be searched for, and builds stopped if any are found:
 
-:warning: This action only works with .Net SDK 8. Check your `global.json` and other settings to avoid incompatibilities.
+![Checks](./docs/upgrades1.png)
+
+:warning: This action only works with .Net SDK 8 or later. Check your [`global.json`](https://learn.microsoft.com/en-us/dotnet/core/tools/global-json) and other settings to avoid incompatibilities.
 
 ## What the options mean
 
@@ -34,6 +35,7 @@ The main options you'll need to provide are below. Most options have defaults ap
 | The option  | What's it for?  | What's the default? |
 | - | - | - |
 | `project-path` | The relative path to the solution or project | The solution file in the working directory.  |
+| `scan-issues` | To scan vulnerabilities, deprecations, etc. | `true` |
 | `deprecated` | Include deprecated packages in the scan | `false` |
 | `vulnerable` | Include vulnerable packages in the scan | `true` |
 | `transitives` | Include transitive packages in the scan | `true` |
@@ -41,18 +43,26 @@ The main options you'll need to provide are below. Most options have defaults ap
 | `fail-on-high` | Fail scans if high severity vulnerabilities are found | `true` |
 | `fail-on-moderate` | Fail scans if moderate severity vulnerabilities are found | `false` |
 | `fail-on-legacy` | Fail scans if packages are found to be deprecated for legacy reasons | `false` |
-| `pass-img` | URI of a report image for successful scans | |
-| `fail-img` | URI of a report image for failed scans | |
-| `restore-solution` | Restore the solution or project | `true` |
-| `restore-tools` | Restore tools | `true` |
+| `github-title` | The title to give to the PR Vulnerabilities report | `Package vulnerabilities` |
+
+If you want to check for outstanding upgrades, these additional options are available:
+
+| The option  | What's it for?  | What's the default? |
+| - | - | - |
+| `scan-upgrades` | To scan for upgrades | 'false' |
+| `fail-on-upgrades` | Set to `true` to stop builds with outstanding upgrades. | `false` |
+| `github-upgrade-title` | The title to give to the PR upgrades report | `Package upgrades` |
 
 Some options are available to control the action's credentials, tracing, etc. You shouldn't need to use this in most cases.
 
 | The option  | What's it for?  | What's the default? |
 | - | - | - |
+| `pass-img` | URI of a report image for successful scans | |
+| `fail-img` | URI of a report image for failed scans | |
+| `restore-solution` | Restore the solution or project | `true` |
+| `restore-tools` | Restore tools | `true` |
 | `github-token` | A github token to push reports to PRs | `github.token` |
 | `repo` | The repository name in `owner/repo` form | `github.repository` |
-| `github-title` | The title to give to the PR report | `Package vulnerabilities` |
 | `prid` | The pull request ID | `github.event.number` | 
 | `commit-hash` | The Github commit hash | `github.sha` |
 | `trace` | Output trace logging to the console | `false` |
@@ -71,7 +81,7 @@ You'll need to first `checkout` the repository. The default options will scan fo
   uses: tonycknight/pkgchk-action@v1
 ```
 
-### I want to scan a specific project
+### I want to scan a specific project...
 
 ```yaml
 - uses: actions/checkout@v4
@@ -82,7 +92,7 @@ You'll need to first `checkout` the repository. The default options will scan fo
     project-path: src/testproj.csproj
 ```
 
-### I want to scan for every possible problem
+### I want to scan for every possible problem and stop builds...
 
 Easy: ensure `vulnerable`, `deprecated` & `transitives` are `true`, and all the `fail-on-` options are also `true`:
 
@@ -92,6 +102,8 @@ Easy: ensure `vulnerable`, `deprecated` & `transitives` are `true`, and all the 
 - name: Run SCA
   uses: tonycknight/pkgchk-action@v1
   with:
+    scan-issues: true
+    scan-upgrades: true
     vulnerable: true
     deprecated: true
     transitives: true
@@ -99,6 +111,29 @@ Easy: ensure `vulnerable`, `deprecated` & `transitives` are `true`, and all the 
     fail-on-high: true
     fail-on-moderate: true
     fail-on-legacy: true
+    fail-on-upgrades: true
+```
+
+### I want to scan for every possible problem with only reports...
+
+Easy: ensure `vulnerable`, `deprecated` & `transitives` are `true`, and all the `fail-on-` options are also `false`:
+
+```yaml
+- uses: actions/checkout@v4
+
+- name: Run SCA
+  uses: tonycknight/pkgchk-action@v1
+  with:
+    scan-issues: true
+    scan-upgrades: true
+    vulnerable: true
+    deprecated: true
+    transitives: true
+    fail-on-critical: false
+    fail-on-high: false
+    fail-on-moderate: false
+    fail-on-legacy: false
+    fail-on-upgrades: false
 ```
 
 ### I want to put images on the report
