@@ -12,7 +12,7 @@ A Github action to perform .Net package dependency checks & PRs.
 Simply include the action in your workflow like so:
 
 ```yaml
-- uses: actions/checkout@v4
+- uses: actions/checkout@v6
 
 - name: Run SCA
   uses: tonycknight/pkgchk-action@v1
@@ -75,7 +75,7 @@ Some options are available to control the action's credentials, tracing, etc. Yo
 You'll need to first `checkout` the repository. The default options will scan for High and Critical vulnerabilities.
 
 ```yaml
-- uses: actions/checkout@v4
+- uses: actions/checkout@v6
 
 - name: Run SCA
   uses: tonycknight/pkgchk-action@v1
@@ -84,7 +84,7 @@ You'll need to first `checkout` the repository. The default options will scan fo
 ### I want to scan a specific project...
 
 ```yaml
-- uses: actions/checkout@v4
+- uses: actions/checkout@v6
 
 - name: Run SCA
   uses: tonycknight/pkgchk-action@v1
@@ -97,7 +97,7 @@ You'll need to first `checkout` the repository. The default options will scan fo
 Easy: ensure `vulnerable`, `deprecated` & `transitives` are `true`, and all the `fail-on-` options are also `true`:
 
 ```yaml
-- uses: actions/checkout@v4
+- uses: actions/checkout@v6
 
 - name: Run SCA
   uses: tonycknight/pkgchk-action@v1
@@ -119,7 +119,7 @@ Easy: ensure `vulnerable`, `deprecated` & `transitives` are `true`, and all the 
 Easy: ensure `vulnerable`, `deprecated` & `transitives` are `true`, and all the `fail-on-` options are also `false`:
 
 ```yaml
-- uses: actions/checkout@v4
+- uses: actions/checkout@v6
 
 - name: Run SCA
   uses: tonycknight/pkgchk-action@v1
@@ -141,7 +141,7 @@ Easy: ensure `vulnerable`, `deprecated` & `transitives` are `true`, and all the 
 Simple: just set URLs to the `pass-img` and `fail-img` parameters, like so:
 
 ```yaml
-- uses: actions/checkout@v4
+- uses: actions/checkout@v6
 
 - name: Run SCA
   uses: tonycknight/pkgchk-action@v1
@@ -155,7 +155,7 @@ Simple: just set URLs to the `pass-img` and `fail-img` parameters, like so:
 [Set up .net](https://github.com/actions/setup-dotnet?tab=readme-ov-file#setting-up-authentication-for-nuget-feeds) before scanning:
 
 ```yaml
-- uses: actions/checkout@v4
+- uses: actions/checkout@v6
 
 - name: Add nuget source
   uses: actions/setup-dotnet@v4
