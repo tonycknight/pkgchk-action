@@ -96,7 +96,7 @@ runs:
           if: inputs.scan-issues == 'false' &&  inputs.scan-upgrades == 'false'
           shell: bash
           run: |
-            echo ":x: At least one of 'scan-issues' or 'scan-upgrades' must be true." >> $GITHUB_STEP_SUMMARY 
+            echo ":x: Either 'scan-issues' or 'scan-upgrades' must be true." >> $GITHUB_STEP_SUMMARY 
             exit 1
           
         - name: Restore tools
