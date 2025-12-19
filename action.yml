@@ -89,6 +89,10 @@ inputs:
     description: 'Restore tools'
     required: false
     default: true
+  config:
+    description: 'Path to configuration file'
+    required: false
+    default: ''
 runs:  
       using: 'composite'
       steps:
@@ -99,6 +103,15 @@ runs:
             echo ":x: Either 'scan-issues' or 'scan-upgrades' must be true." >> $GITHUB_STEP_SUMMARY 
             exit 1
           
+        - name: Set parameters
+          shell: bash
+          run: |
+            if [ -z "${{ inputs.config }}" ]; then
+              echo "CONFIG_PARAM=" >> $GITHUB_ENV
+            else
+              echo "CONFIG_PARAM=--config ${{ inputs.config }}" >> $GITHUB_ENV
+            fi
+            
         - name: Restore tools
           shell: bash
           if: ${{ inputs.restore-tools == 'true' }}
@@ -119,7 +132,7 @@ runs:
           if: ${{ inputs.scan-issues == 'true' }}
           continue-on-error: true
           run: |
-            dotnet pkgchk scan ./${{ inputs.project-path }} --deprecated ${{ inputs.deprecated }} --vulnerable ${{ inputs.vulnerable }} --transitive ${{ inputs.transitives }} --trace ${{ inputs.trace }} --github-token ${{ inputs.github-token }} --github-repo ${{ inputs.repo }}  --github-commit ${{ inputs.commit-hash }} --github-title "${{ inputs.github-title }}" --pass-img "${{ inputs.pass-img }}" --fail-img "${{ inputs.fail-img }}"  --github-pr "${{ inputs.prid }}" -s "${{ inputs.fail-on-critical == 'true' && 'Critical' || ' ' }}" -s "${{ inputs.fail-on-high == 'true' && 'High' || ' ' }}" -s "${{ inputs.fail-on-moderate == 'true' && 'Moderate' || ' ' }}" -s "${{ inputs.fail-on-critical == 'true' && 'Critical Bugs' || ' ' }}"  -s "${{ inputs.fail-on-legacy == 'true' && 'Legacy' || ' ' }}"
+            dotnet pkgchk scan ./${{ inputs.project-path }} --deprecated ${{ inputs.deprecated }} --vulnerable ${{ inputs.vulnerable }} --transitive ${{ inputs.transitives }} --trace ${{ inputs.trace }} --github-token ${{ inputs.github-token }} --github-repo ${{ inputs.repo }}  --github-commit ${{ inputs.commit-hash }} --github-title "${{ inputs.github-title }}" --pass-img "${{ inputs.pass-img }}" --fail-img "${{ inputs.fail-img }}"  --github-pr "${{ inputs.prid }}" -s "${{ inputs.fail-on-critical == 'true' && 'Critical' || ' ' }}" -s "${{ inputs.fail-on-high == 'true' && 'High' || ' ' }}" -s "${{ inputs.fail-on-moderate == 'true' && 'Moderate' || ' ' }}" -s "${{ inputs.fail-on-critical == 'true' && 'Critical Bugs' || ' ' }}"  -s "${{ inputs.fail-on-legacy == 'true' && 'Legacy' || ' ' }}" "${{ env.CONFIG_PARAM }}"
 
         - name: Scan for upgrades
           id: scanUpgrades
