@@ -132,7 +132,7 @@ runs:
         - name: Scan for upgrades
           id: scanUpgrades
           shell: bash
-          if: ${{ inputs.scan-upgrades == 'true' == 'true' }}
+          if: ${{ inputs.scan-upgrades == 'true' }}
           continue-on-error: true
           run: |
             if [ -z "${{ inputs.config }}" ]; then
