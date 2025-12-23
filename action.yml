@@ -115,7 +115,7 @@ runs:
 
         - name: Install tool 
           shell: bash
-          run: dotnet tool install pkgchk-cli --version 0.3.609 --local  --create-manifest-if-needed
+          run: dotnet tool install pkgchk-cli --version 0.3.616-preview --local  --create-manifest-if-needed
           
         - name: Scan for vulnerabilities
           id: scanVulnerabilities
