@@ -105,10 +105,10 @@ runs:
       using: 'composite'
       steps:
         - name: Check parameters
-          if: inputs.scan-issues == 'false' &&  inputs.scan-upgrades == 'false'
+          if: inputs.scan-issues == 'false' &&  inputs.scan-upgrades == 'false' && inputs.list-dependencies == 'false'
           shell: bash
           run: |
-            echo ":x: Either 'scan-issues' or 'scan-upgrades' must be true." >> $GITHUB_STEP_SUMMARY 
+            echo ":x: Either 'scan-issues', 'scan-upgrades' or 'list-dependencies' must be true." >> $GITHUB_STEP_SUMMARY 
             exit 1
                       
         - name: Restore tools
@@ -162,7 +162,7 @@ runs:
             fi
 
         - name: Consolidate results
-          if : steps.scanVulnerabilities.outcome == 'failure' || steps.scanUpgrades.outcome == 'failure'
+          if : steps.scanVulnerabilities.outcome == 'failure' || steps.scanUpgrades.outcome == 'failure' || steps.listDependencies.outcome == 'failure'
           shell: bash
           run: exit 1
 
