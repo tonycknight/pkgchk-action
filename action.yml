@@ -89,6 +89,10 @@ inputs:
     description: 'Restore tools'
     required: false
     default: true
+  config:
+    description: 'Path to configuration file'
+    required: false
+    default: ''
 runs:  
       using: 'composite'
       steps:
@@ -96,9 +100,9 @@ runs:
           if: inputs.scan-issues == 'false' &&  inputs.scan-upgrades == 'false'
           shell: bash
           run: |
-            echo ":x: At least one of 'scan-issues' or 'scan-upgrades' must be true." >> $GITHUB_STEP_SUMMARY 
+            echo ":x: Either 'scan-issues' or 'scan-upgrades' must be true." >> $GITHUB_STEP_SUMMARY 
             exit 1
-          
+                      
         - name: Restore tools
           shell: bash
           if: ${{ inputs.restore-tools == 'true' }}
@@ -111,7 +115,7 @@ runs:
 
         - name: Install tool 
           shell: bash
-          run: dotnet tool install pkgchk-cli --version 0.3.569 --local  --create-manifest-if-needed
+          run: dotnet tool install pkgchk-cli --version 0.3.626 --local  --create-manifest-if-needed
           
         - name: Scan for vulnerabilities
           id: scanVulnerabilities
@@ -119,7 +123,11 @@ runs:
           if: ${{ inputs.scan-issues == 'true' }}
           continue-on-error: true
           run: |
-            dotnet pkgchk scan ./${{ inputs.project-path }} --deprecated ${{ inputs.deprecated }} --vulnerable ${{ inputs.vulnerable }} --transitive ${{ inputs.transitives }} --trace ${{ inputs.trace }} --github-token ${{ inputs.github-token }} --github-repo ${{ inputs.repo }}  --github-commit ${{ inputs.commit-hash }} --github-title "${{ inputs.github-title }}" --pass-img "${{ inputs.pass-img }}" --fail-img "${{ inputs.fail-img }}"  --github-pr "${{ inputs.prid }}" -s "${{ inputs.fail-on-critical == 'true' && 'Critical' || ' ' }}" -s "${{ inputs.fail-on-high == 'true' && 'High' || ' ' }}" -s "${{ inputs.fail-on-moderate == 'true' && 'Moderate' || ' ' }}" -s "${{ inputs.fail-on-critical == 'true' && 'Critical Bugs' || ' ' }}"  -s "${{ inputs.fail-on-legacy == 'true' && 'Legacy' || ' ' }}"
+            if [ -z "${{ inputs.config }}" ]; then  
+              dotnet pkgchk scan ./${{ inputs.project-path }} --deprecated ${{ inputs.deprecated }} --vulnerable ${{ inputs.vulnerable }} --transitive ${{ inputs.transitives }} --trace ${{ inputs.trace }} --github-token ${{ inputs.github-token }} --github-repo ${{ inputs.repo }}  --github-commit ${{ inputs.commit-hash }} --github-title "${{ inputs.github-title }}" --pass-img "${{ inputs.pass-img }}" --fail-img "${{ inputs.fail-img }}"  --github-pr "${{ inputs.prid }}" -s "${{ inputs.fail-on-critical == 'true' && 'Critical' || ' ' }}" -s "${{ inputs.fail-on-high == 'true' && 'High' || ' ' }}" -s "${{ inputs.fail-on-moderate == 'true' && 'Moderate' || ' ' }}" -s "${{ inputs.fail-on-critical == 'true' && 'Critical Bugs' || ' ' }}"  -s "${{ inputs.fail-on-legacy == 'true' && 'Legacy' || ' ' }}"
+            else
+              dotnet pkgchk scan ./${{ inputs.project-path }} --config ${{ inputs.config }} --trace ${{ inputs.trace }} --github-token ${{ inputs.github-token }} --github-repo ${{ inputs.repo }}  --github-commit ${{ inputs.commit-hash }} --github-title "${{ inputs.github-title }}" --pass-img "${{ inputs.pass-img }}" --fail-img "${{ inputs.fail-img }}"  --github-pr "${{ inputs.prid }}"
+            fi
 
         - name: Scan for upgrades
           id: scanUpgrades
@@ -127,7 +135,12 @@ runs:
           if: ${{ inputs.scan-upgrades == 'true' }}
           continue-on-error: true
           run: |
-            dotnet pkgchk upgrades ./${{ inputs.project-path }} --trace ${{ inputs.trace }} --github-token ${{ inputs.github-token }} --github-repo ${{ inputs.repo }}  --github-commit ${{ inputs.commit-hash }} --github-title "${{ inputs.github-upgrade-title }}" --pass-img "${{ inputs.pass-img }}" --fail-img "${{ inputs.fail-img }}"  --github-pr "${{ inputs.prid }}" --break-on-upgrades "${{ inputs.fail-on-upgrades }}"
+            if [ -z "${{ inputs.config }}" ]; then
+              dotnet pkgchk upgrades ./${{ inputs.project-path }} --trace ${{ inputs.trace }} --github-token ${{ inputs.github-token }} --github-repo ${{ inputs.repo }}  --github-commit ${{ inputs.commit-hash }} --github-title "${{ inputs.github-upgrade-title }}" --pass-img "${{ inputs.pass-img }}" --fail-img "${{ inputs.fail-img }}"  --github-pr "${{ inputs.prid }}" --break-on-upgrades "${{ inputs.fail-on-upgrades }}"
+            else
+              dotnet pkgchk upgrades ./${{ inputs.project-path }} --config ${{ inputs.config }} --trace ${{ inputs.trace }} --github-token ${{ inputs.github-token }} --github-repo ${{ inputs.repo }}  --github-commit ${{ inputs.commit-hash }} --github-title "${{ inputs.github-upgrade-title }}" --pass-img "${{ inputs.pass-img }}" --fail-img "${{ inputs.fail-img }}"  --github-pr "${{ inputs.prid }}" 
+            fi
+
 
         - name: Consolidate results
           if : steps.scanVulnerabilities.outcome == 'failure' || steps.scanUpgrades.outcome == 'failure'

@@ -30,6 +30,8 @@ Outstanding upgrades can be searched for, and builds stopped if any are found:
 
 ## What the options mean
 
+### Scanning for vulnerabilities
+
 The main options you'll need to provide are below. Most options have defaults applied, giving scans for high to critical vulnerabilities.
 
 | The option  | What's it for?  | What's the default? |
@@ -45,13 +47,18 @@ The main options you'll need to provide are below. Most options have defaults ap
 | `fail-on-legacy` | Fail scans if packages are found to be deprecated for legacy reasons | `false` |
 | `github-title` | The title to give to the PR Vulnerabilities report | `Package vulnerabilities` |
 
+### Checking for upgrades
+
 If you want to check for outstanding upgrades, these additional options are available:
 
 | The option  | What's it for?  | What's the default? |
 | - | - | - |
+| `project-path` | The relative path to the solution or project | The solution file in the working directory.  |
 | `scan-upgrades` | To scan for upgrades | `false` |
 | `fail-on-upgrades` | Set to `true` to stop builds with outstanding upgrades. | `false` |
 | `github-upgrade-title` | The title to give to the PR upgrades report | `Package upgrades` |
+
+### Common options
 
 Some options are available to control the action's credentials, tracing, etc. You shouldn't need to use this in most cases.
 
