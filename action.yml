@@ -13,6 +13,10 @@ inputs:
     description: 'Scan for package upgrades'
     required: false
     default: false
+  list-dependencies:
+    description: 'List dependencies'
+    required: false
+    default: false
   deprecated:  
     description: 'Scan for deprecated packages'
     required: false
@@ -45,6 +49,10 @@ inputs:
     description: 'The upgrades report title'
     required: false
     default: 'Package upgrades'
+  github-dependencies-title: 
+    description: 'The dependency report title'
+    required: false
+    default: 'Project dependencies'
   prid: 
     description: 'The GitHub pull request ID'
     required: false
@@ -141,6 +149,17 @@ runs:
               dotnet pkgchk upgrades ./${{ inputs.project-path }} --config ${{ inputs.config }} --trace ${{ inputs.trace }} --github-token ${{ inputs.github-token }} --github-repo ${{ inputs.repo }}  --github-commit ${{ inputs.commit-hash }} --github-title "${{ inputs.github-upgrade-title }}" --pass-img "${{ inputs.pass-img }}" --fail-img "${{ inputs.fail-img }}"  --github-pr "${{ inputs.prid }}" 
             fi
 
+        - name: List dependencies
+          id: listDependencies
+          shell: bash
+          if: ${{ inputs.list-dependencies == 'true' }}
+          continue-on-error: true
+          run: |
+            if [ -z "${{ inputs.config }}" ]; then
+              dotnet pkgchk list ./${{ inputs.project-path }} --trace ${{ inputs.trace }} --transitive ${{ inputs.transitives }} --github-token ${{ inputs.github-token }} --github-repo ${{ inputs.repo }}  --github-commit ${{ inputs.commit-hash }} --github-pr "${{ inputs.prid }}" --github-title "${{ inputs.github-dependencies-title }}"
+            else
+              dotnet pkgchk list ./${{ inputs.project-path }} --config ${{ inputs.config }} --trace ${{ inputs.trace }} --github-token ${{ inputs.github-token }} --github-repo ${{ inputs.repo }}  --github-commit ${{ inputs.commit-hash }} --github-pr "${{ inputs.prid }}" --github-title "${{ inputs.github-dependencies-title }}"
+            fi
 
         - name: Consolidate results
           if : steps.scanVulnerabilities.outcome == 'failure' || steps.scanUpgrades.outcome == 'failure'
