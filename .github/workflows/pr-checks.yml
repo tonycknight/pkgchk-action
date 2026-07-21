@@ -16,7 +16,7 @@ jobs:
     name: Set PR scope
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/labeler@v6
+      - uses: actions/labeler@v7
         name: Set label
         with:
           repo-token: "${{ secrets.GITHUB_TOKEN }}"
