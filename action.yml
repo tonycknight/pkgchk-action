@@ -113,10 +113,10 @@ runs:
       using: 'composite'
       steps:
         - name: Check parameters
-          if: inputs.scan-issues == 'false' &&  inputs.scan-upgrades == 'false' && inputs.list-dependencies == 'false'
+          if: inputs.scan-issues == 'false' &&  inputs.scan-upgrades == 'false' && inputs.list-dependencies == 'false' && inputs.scan-licences == 'false'
           shell: bash
           run: |
-            echo ":x: Either 'scan-issues', 'scan-upgrades' or 'list-dependencies' must be true." >> $GITHUB_STEP_SUMMARY 
+            echo ":x: Either 'scan-issues', 'scan-upgrades', 'list-dependencies' or 'scan-licences' must be true." >> $GITHUB_STEP_SUMMARY 
             exit 1
                       
         - name: Restore tools
