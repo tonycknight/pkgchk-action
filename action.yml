@@ -13,6 +13,10 @@ inputs:
     description: 'Scan for package upgrades'
     required: false
     default: false
+  scan-licences:
+    description: 'Scan for licence issues'
+    required: false
+    default: false
   list-dependencies:
     description: 'List dependencies'
     required: false
@@ -49,6 +53,10 @@ inputs:
     description: 'The upgrades report title'
     required: false
     default: 'Package upgrades'
+  github-licences-title:
+    description: 'The licences report title'
+    required: false
+    default: 'Licence checks'
   github-dependencies-title: 
     description: 'The dependency report title'
     required: false
@@ -161,8 +169,20 @@ runs:
               dotnet pkgchk list ./${{ inputs.project-path }} --config ${{ inputs.config }} --trace ${{ inputs.trace }} --github-token ${{ inputs.github-token }} --github-repo ${{ inputs.repo }}  --github-commit ${{ inputs.commit-hash }} --github-pr "${{ inputs.prid }}" --github-title "${{ inputs.github-dependencies-title }}"
             fi
 
+        - name: Licence checks
+          id: licenceChecks
+          shell: bash
+          if: ${{ inputs.scan-licences == 'true' }}
+          continue-on-error: true
+          run: |
+            if [ -z "${{ inputs.config }}" ]; then
+              dotnet pkgchk licences ./${{ inputs.project-path }} --trace ${{ inputs.trace }} --github-token ${{ inputs.github-token }} --github-repo ${{ inputs.repo }}  --github-commit ${{ inputs.commit-hash }} --github-pr "${{ inputs.prid }}" --github-title "${{ inputs.github-licences-title }}" --pass-img "${{ inputs.pass-img }}" --fail-img "${{ inputs.fail-img }}"
+            else
+              dotnet pkgchk licences ./${{ inputs.project-path }} --config ${{ inputs.config }} --trace ${{ inputs.trace }} --github-token ${{ inputs.github-token }} --github-repo ${{ inputs.repo }}  --github-commit ${{ inputs.commit-hash }} --github-pr "${{ inputs.prid }}" --github-title "${{ inputs.github-licences-title }}" --pass-img "${{ inputs.pass-img }}" --fail-img "${{ inputs.fail-img }}"
+            fi
+
         - name: Consolidate results
-          if : steps.scanVulnerabilities.outcome == 'failure' || steps.scanUpgrades.outcome == 'failure' || steps.listDependencies.outcome == 'failure'
+          if : steps.scanVulnerabilities.outcome == 'failure' || steps.scanUpgrades.outcome == 'failure' || steps.listDependencies.outcome == 'failure' || steps.licenceChecks.outcome == 'failure'
           shell: bash
           run: exit 1
 
