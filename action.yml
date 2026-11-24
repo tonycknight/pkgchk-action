@@ -89,6 +89,10 @@ inputs:
     description: 'fail on any outstanding package upgrades.'
     required: true
     default: false
+  fail-on-licences: 
+    description: 'fail on any outstanding package licences.'
+    required: true
+    default: false
   pass-img: 
     description: 'URI of an image for successful scans'
     required: false
@@ -131,7 +135,7 @@ runs:
 
         - name: Install tool 
           shell: bash
-          run: dotnet tool install pkgchk-cli --version 1.1.4 --local  --create-manifest-if-needed
+          run: dotnet tool install pkgchk-cli --version 1.1.5 --local  --create-manifest-if-needed
           
         - name: Scan for vulnerabilities
           id: scanVulnerabilities
@@ -176,9 +180,9 @@ runs:
           continue-on-error: true
           run: |
             if [ -z "${{ inputs.config }}" ]; then
-              dotnet pkgchk licences ./${{ inputs.project-path }} --trace ${{ inputs.trace }} --github-token ${{ inputs.github-token }} --github-repo ${{ inputs.repo }}  --github-commit ${{ inputs.commit-hash }} --github-pr "${{ inputs.prid }}" --github-title "${{ inputs.github-licences-title }}" --pass-img "${{ inputs.pass-img }}" --fail-img "${{ inputs.fail-img }}"
+              dotnet pkgchk licences ./${{ inputs.project-path }} --trace ${{ inputs.trace }} --github-token ${{ inputs.github-token }} --github-repo ${{ inputs.repo }}  --github-commit ${{ inputs.commit-hash }} --github-pr "${{ inputs.prid }}" --github-title "${{ inputs.github-licences-title }}" --pass-img "${{ inputs.pass-img }}" --fail-img "${{ inputs.fail-img }}" --break-on-licences "${{ inputs.fail-on-licences }}"
             else
-              dotnet pkgchk licences ./${{ inputs.project-path }} --config ${{ inputs.config }} --trace ${{ inputs.trace }} --github-token ${{ inputs.github-token }} --github-repo ${{ inputs.repo }}  --github-commit ${{ inputs.commit-hash }} --github-pr "${{ inputs.prid }}" --github-title "${{ inputs.github-licences-title }}" --pass-img "${{ inputs.pass-img }}" --fail-img "${{ inputs.fail-img }}"
+              dotnet pkgchk licences ./${{ inputs.project-path }} --config ${{ inputs.config }} --trace ${{ inputs.trace }} --github-token ${{ inputs.github-token }} --github-repo ${{ inputs.repo }}  --github-commit ${{ inputs.commit-hash }} --github-pr "${{ inputs.prid }}" --github-title "${{ inputs.github-licences-title }}" --pass-img "${{ inputs.pass-img }}" --fail-img "${{ inputs.fail-img }}" --break-on-licences "${{ inputs.fail-on-licences }}"
             fi
 
         - name: Consolidate results
