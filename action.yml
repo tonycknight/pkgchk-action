@@ -13,6 +13,10 @@ inputs:
     description: 'Scan for package upgrades'
     required: false
     default: false
+  scan-licences:
+    description: 'Scan for licence issues'
+    required: false
+    default: false
   list-dependencies:
     description: 'List dependencies'
     required: false
@@ -49,6 +53,10 @@ inputs:
     description: 'The upgrades report title'
     required: false
     default: 'Package upgrades'
+  github-licences-title:
+    description: 'The licences report title'
+    required: false
+    default: 'Licence checks'
   github-dependencies-title: 
     description: 'The dependency report title'
     required: false
@@ -81,6 +89,10 @@ inputs:
     description: 'fail on any outstanding package upgrades.'
     required: true
     default: false
+  fail-on-licences: 
+    description: 'fail on any outstanding package licences.'
+    required: true
+    default: false
   pass-img: 
     description: 'URI of an image for successful scans'
     required: false
@@ -105,10 +117,10 @@ runs:
       using: 'composite'
       steps:
         - name: Check parameters
-          if: inputs.scan-issues == 'false' &&  inputs.scan-upgrades == 'false' && inputs.list-dependencies == 'false'
+          if: inputs.scan-issues == 'false' &&  inputs.scan-upgrades == 'false' && inputs.list-dependencies == 'false' && inputs.scan-licences == 'false'
           shell: bash
           run: |
-            echo ":x: Either 'scan-issues', 'scan-upgrades' or 'list-dependencies' must be true." >> $GITHUB_STEP_SUMMARY 
+            echo ":x: Either 'scan-issues', 'scan-upgrades', 'list-dependencies' or 'scan-licences' must be true." >> $GITHUB_STEP_SUMMARY 
             exit 1
                       
         - name: Restore tools
@@ -123,7 +135,7 @@ runs:
 
         - name: Install tool 
           shell: bash
-          run: dotnet tool install pkgchk-cli --version 1.1.2 --local  --create-manifest-if-needed
+          run: dotnet tool install pkgchk-cli --version 1.1.5 --local  --create-manifest-if-needed
           
         - name: Scan for vulnerabilities
           id: scanVulnerabilities
@@ -161,8 +173,20 @@ runs:
               dotnet pkgchk list ./${{ inputs.project-path }} --config ${{ inputs.config }} --trace ${{ inputs.trace }} --github-token ${{ inputs.github-token }} --github-repo ${{ inputs.repo }}  --github-commit ${{ inputs.commit-hash }} --github-pr "${{ inputs.prid }}" --github-title "${{ inputs.github-dependencies-title }}"
             fi
 
+        - name: Licence checks
+          id: licenceChecks
+          shell: bash
+          if: ${{ inputs.scan-licences == 'true' }}
+          continue-on-error: true
+          run: |
+            if [ -z "${{ inputs.config }}" ]; then
+              dotnet pkgchk licences ./${{ inputs.project-path }} --trace ${{ inputs.trace }} --github-token ${{ inputs.github-token }} --github-repo ${{ inputs.repo }}  --github-commit ${{ inputs.commit-hash }} --github-pr "${{ inputs.prid }}" --github-title "${{ inputs.github-licences-title }}" --pass-img "${{ inputs.pass-img }}" --fail-img "${{ inputs.fail-img }}" --break-on-licences "${{ inputs.fail-on-licences }}"
+            else
+              dotnet pkgchk licences ./${{ inputs.project-path }} --config ${{ inputs.config }} --trace ${{ inputs.trace }} --github-token ${{ inputs.github-token }} --github-repo ${{ inputs.repo }}  --github-commit ${{ inputs.commit-hash }} --github-pr "${{ inputs.prid }}" --github-title "${{ inputs.github-licences-title }}" --pass-img "${{ inputs.pass-img }}" --fail-img "${{ inputs.fail-img }}" --break-on-licences "${{ inputs.fail-on-licences }}"
+            fi
+
         - name: Consolidate results
-          if : steps.scanVulnerabilities.outcome == 'failure' || steps.scanUpgrades.outcome == 'failure' || steps.listDependencies.outcome == 'failure'
+          if : steps.scanVulnerabilities.outcome == 'failure' || steps.scanUpgrades.outcome == 'failure' || steps.listDependencies.outcome == 'failure' || steps.licenceChecks.outcome == 'failure'
           shell: bash
           run: exit 1
 
